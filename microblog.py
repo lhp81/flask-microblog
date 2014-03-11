@@ -25,7 +25,13 @@ class Post(db.Model):
     def __repr__(self):
         return '<Post %r>' % self.title
 
-    def write_post(self, title, text):
+    def post_controller(title, body):
+        post = Post(title, body)
+        now = datetime.DateTime()
+        post.pub_date = now
+        db.session.add(post)
+
+    def write_post(title, text):
         pass
 
     def read_posts():

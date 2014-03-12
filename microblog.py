@@ -52,4 +52,4 @@ def read_post(id):
         return the_post
 
 if __name__ == '__main__':
-    manager.run()
+    manager.run(debug=True)

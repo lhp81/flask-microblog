@@ -2,17 +2,22 @@ from flask import Flask
 from flask.ext.sqlalchemy import SQLAlchemy
 from datetime import datetime
 from flask.ext.script import Manager
+from flask.ext.migrate import Migrate, MigrateCommand
+
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] =  \
-    'postgresql://luke@localhost/flask-blog'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///flaskblog'
+
 db = SQLAlchemy(app)
+migrate = Migrate(app, db)
+
 manager = Manager(app)
+manager.add_command('db', MigrateCommand)
 
 
 class Post(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(80))
+    title = db.Column(db.String(100), unique=True)
     body = db.Column(db.Text)
     pub_date = db.Column(db.DateTime)
 
@@ -35,7 +40,8 @@ def write_post(title, text):
 
 def read_posts():
     """Display posts in reverse order."""
-    pass
+    posts = Post.query.all()
+    return posts
 
 
 def read_post(id):
@@ -46,4 +52,4 @@ def read_post(id):
         return the_post
 
 if __name__ == '__main__':
-    pass
+    manager.run()

@@ -6,8 +6,8 @@ from flask.ext.script import Manager
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] =  \
     'postgresql://luke@localhost/flask-blog'
-app.config['SQLALCHEMY_COMMIT_ON_TEARDOWN'] = True
 db = SQLAlchemy(app)
+manager = Manager(app)
 
 
 class Post(db.Model):
@@ -26,17 +26,24 @@ class Post(db.Model):
     def __repr__(self):
         return '<Post %r>' % self.title
 
-    def post_controller(title, body):
-        post = Post(title, body)
-        now = datetime.DateTime()
-        post.pub_date = now
-        db.session.add(post)
 
-    def write_post(title, text):
-        pass
+def write_post(title, text):
+    new_post = Post(title, text)
+    db.session.add(new_post)
+    db.session.commit()
 
-    def read_posts():
-        pass
 
-    def read_post(id):
-        pass
+def read_posts():
+    """Display posts in reverse order."""
+    pass
+
+
+def read_post(id):
+    the_post = Post.query.filter_by(id=id).first()
+    if not Post:
+        raise IndexError('That post doesn\'t exist!')
+    else:
+        return the_post
+
+if __name__ == '__main__':
+    pass

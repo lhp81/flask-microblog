@@ -38,13 +38,14 @@ def write_post(title, text):
     db.session.commit()
 
 
-def read_posts():
+def read_all_posts():
     """Display posts in reverse order."""
-    posts = Post.query.all()
-    return posts
+    all_posts = Post.query().order_by(Post.id.desc()).all()
+    # the above was taken from our in-class code review
+    return all_posts
 
 
-def read_post(id):
+def read_a_post(id):
     the_post = Post.query.filter_by(id=id).first()
     if not Post:
         raise IndexError('That post doesn\'t exist!')

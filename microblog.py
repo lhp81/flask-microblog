@@ -1,4 +1,5 @@
 from flask import Flask
+from flask import request
 from flask.ext.sqlalchemy import SQLAlchemy
 from flaskext.seasurf import SeaSurf
 from datetime import datetime
@@ -56,6 +57,21 @@ def read_a_post(id):
     else:
         return the_post
 
+
+def login(id, password):
+    pass
+
+
+def show_login_form():
+    pass
+
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        login()
+    else:
+        show_login_form()
 
 if __name__ == '__main__':
     manager.run(debug=True)

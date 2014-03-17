@@ -28,6 +28,7 @@ class Post(db.Model):
     title = db.Column(db.String(100), unique=True)
     body = db.Column(db.Text)
     pub_date = db.Column(db.DateTime)
+    auth_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
     def __init__(self, title, body, pub_date=None):
         self.title = title

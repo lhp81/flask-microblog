@@ -1,5 +1,6 @@
 from flask import Flask
 from flask.ext.sqlalchemy import SQLAlchemy
+from flaskext.seasurf import SeaSurf
 from datetime import datetime
 from flask.ext.script import Manager
 from flask.ext.migrate import Migrate, MigrateCommand
@@ -9,6 +10,7 @@ app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///flaskblog'
 
 db = SQLAlchemy(app)
+csrf = SeaSurf(app)
 migrate = Migrate(app, db)
 
 manager = Manager(app)

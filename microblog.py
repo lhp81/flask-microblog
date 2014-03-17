@@ -1,7 +1,7 @@
 from flask import Flask
 from flask import request
 from flask.ext.sqlalchemy import SQLAlchemy
-from flaskext.seasurf import SeaSurf
+# from flaskext.seasurf import SeaSurf
 from datetime import datetime
 from flask.ext.script import Manager
 from flask.ext.migrate import Migrate, MigrateCommand
@@ -12,7 +12,7 @@ app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///flaskblog'
 
 db = SQLAlchemy(app)
-csrf = SeaSurf(app)
+# csrf = SeaSurf(app)
 migrate = Migrate(app, db)
 bcrypt = Bcrypt(app)
 
@@ -68,9 +68,10 @@ def show_login_form():
 
 @app.route('/')
 @app.route('/index')
-@login_required
+# @login_required
 def index():
-    user = 
+    pass
+
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -80,8 +81,13 @@ def login():
         show_login_form()
 
 
-@app.route('/log_out')
-def log_out()
+@app.route('/post', methods=['GET', 'POST'])
+@app.route('/logout')
+def log_out():
+    if request.method == 'POST':
+        log_out()
+    else:
+        show_login_form()
 
 if __name__ == '__main__':
-    manager.run(debug=True)
+    manager.run()

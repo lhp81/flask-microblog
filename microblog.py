@@ -66,6 +66,12 @@ def show_login_form():
     pass
 
 
+@app.route('/')
+@app.route('/index')
+@login_required
+def index():
+    user = 
+
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':

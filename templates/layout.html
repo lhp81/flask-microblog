@@ -2,8 +2,14 @@
 <html>
 <head>
     {% block head %}
-    <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap.min.css') }}">
-    <title>microbloggin' with flask!</title>
+      {% block styles %}
+      {{super()}}
+      <link rel="stylesheet"
+            href="{{url_for('.static', filename='bootstrap.min.css')}}">
+      {% endblock %}
+<!--     <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap.min.css') }}">
+ -->    
+   <title>microbloggin' with flask!</title>
     <div class="navbar navbar-inverse">
   <div class="navbar-header">
     <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-inverse-collapse">
@@ -44,18 +50,19 @@
   </div>
     {% endblock %}
 <body>
+{% block body %}
     {% if name %}
         <h1>Welcome, {{name}}</h1>
     {% else %}
         <h1>Welcome, friend!</h1>
     {% endif %}
+
     <div id="content">{% block content %}{% endblock %}</div>
+{% endblock %}
     <div id='footer'>
-        {% block footer %}
+        {% block footer %}<hr>
         &copy; Copyright 2014 by <a href="http://fmicro.lukewrites.com/">me</a>.
         {% endblock %}
     </div>
   </body>
 </html>
-
-I want to add a navbar to the top of this.

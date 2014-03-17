@@ -6,6 +6,8 @@ from datetime import datetime
 from flask.ext.script import Manager
 from flask.ext.migrate import Migrate, MigrateCommand
 from flaskext.bcrypt import Bcrypt
+from flask import render_template
+from flask_bootstrap import Bootstrap
 
 
 app = Flask(__name__)
@@ -15,6 +17,7 @@ db = SQLAlchemy(app)
 # csrf = SeaSurf(app)
 migrate = Migrate(app, db)
 bcrypt = Bcrypt(app)
+bootstrap = Bootstrap(app)
 
 manager = Manager(app)
 manager.add_command('db', MigrateCommand)
@@ -70,24 +73,25 @@ def show_login_form():
 @app.route('/index')
 # @login_required
 def index():
-    pass
+    return render_template('base.html')
 
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    if request.method == 'POST':
-        login()
-    else:
-        show_login_form()
+    return render_template('login.html')
+    # if request.method == 'POST':
+    #     login()
+    # else:
+    #     show_login_form()
 
 
-@app.route('/post', methods=['GET', 'POST'])
-@app.route('/logout')
-def log_out():
-    if request.method == 'POST':
-        log_out()
-    else:
-        show_login_form()
+# @app.route('/post', methods=['GET', 'POST'])
+# @app.route('/logout')
+# def log_out():
+#     if request.method == 'POST':
+#         log_out()
+#     else:
+#         show_login_form()
 
 if __name__ == '__main__':
     manager.run()

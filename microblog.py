@@ -73,5 +73,9 @@ def login():
     else:
         show_login_form()
 
+
+@app.route('/log_out')
+def log_out()
+
 if __name__ == '__main__':
     manager.run(debug=True)

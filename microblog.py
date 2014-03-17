@@ -4,6 +4,7 @@ from flaskext.seasurf import SeaSurf
 from datetime import datetime
 from flask.ext.script import Manager
 from flask.ext.migrate import Migrate, MigrateCommand
+from flaskext.bcrypt import Bcrypt
 
 
 app = Flask(__name__)
@@ -12,6 +13,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///flaskblog'
 db = SQLAlchemy(app)
 csrf = SeaSurf(app)
 migrate = Migrate(app, db)
+bcrypt = Bcrypt(app)
 
 manager = Manager(app)
 manager.add_command('db', MigrateCommand)
@@ -53,6 +55,7 @@ def read_a_post(id):
         raise IndexError('That post doesn\'t exist!')
     else:
         return the_post
+
 
 if __name__ == '__main__':
     manager.run(debug=True)

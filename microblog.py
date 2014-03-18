@@ -7,7 +7,7 @@ from flask.ext.script import Manager
 from flask.ext.migrate import Migrate, MigrateCommand
 from flaskext.bcrypt import Bcrypt
 from flask import render_template
-from flask_bootstrap import Bootstrap
+from flask.ext.bootstrap import Bootstrap
 
 
 app = Flask(__name__)
@@ -41,40 +41,9 @@ class Post(db.Model):
         return '<Post %r>' % self.title
 
 
-def write_post(title, text):
-    new_post = Post(title, text)
-    db.session.add(new_post)
-    db.session.commit()
-
-
-def read_all_posts():
-    """Display posts in reverse order."""
-    all_posts = Post.query().order_by(Post.id.desc()).all()
-    # the above was taken from our in-class code review
-    return all_posts
-
-
-def read_a_post(id):
-    the_post = Post.query.filter_by(id=id).first()
-    if not Post:
-        raise IndexError('That post doesn\'t exist!')
-    else:
-        return the_post
-
-
-def login(id, password):
-    pass
-
-
-def show_login_form():
-    pass
-
-
 @app.route('/')
-@app.route('/index')
-# @login_required
 def index():
-    return render_template('base.html')
+    return render_template('layout.html')
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -93,6 +62,38 @@ def login():
 #         log_out()
 #     else:
 #         show_login_form()
+
+@app.route('/new')
+def write_post(title, text):
+    new_post = Post(title, text)
+    db.session.add(new_post)
+    db.session.commit()
+    return render_template('post.html')
+
+
+def read_all_posts():
+    """Display posts in reverse order."""
+    all_posts = Post.query().order_by(Post.id.desc()).all()
+    # the above was taken from our in-class code review
+    return all_posts
+
+
+def read_a_post(id):
+    the_post = Post.query.filter_by(id=id).first()
+    if not Post:
+        raise IndexError('That post doesn\'t exist!')
+    else:
+        return the_post
+
+
+@app.route('/login')
+def login(id, password):
+    pass
+
+
+
+
+
 
 if __name__ == '__main__':
     manager.run()

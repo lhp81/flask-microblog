@@ -1,6 +1,0 @@
-{% extends "/bootstrap/base.html" %}
-{% block title %}Create a new post{% endblock %}
-{% block head %}
-{% endblock %}
-{% block content %}
-{% end block %}

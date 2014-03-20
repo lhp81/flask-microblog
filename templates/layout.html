@@ -48,17 +48,13 @@
   </div> -->
   </div>
     {% endblock %}
-<body>
-{% block body %}
-    {% if name %}
-        <h1>Welcome, {{name}}</h1>
-    {% else %}
-        <h1>Welcome, friend!</h1>
-    {% endif %}
 
-    <div id="content">{% block content %}{% endblock %}</div>
-{% endblock %}
-    <div id='footer'>
+  {% block content %}    {% if name %}
+          <h1>Welcome, {{name}}</h1>
+      {% else %}
+          <h1>Welcome, friend!</h1>
+      {% endif %}
+  {% endblock %}
         {% block footer %}<hr>
         &copy; Copyright 2014 by <a href="http://fmicro.lukewrites.com/">me</a>.
         {% endblock %}

@@ -79,7 +79,7 @@ def read_post(id):
 
 def add_user(username=None, email=None, password=None):
     if username==None:
-        messages.append('No anonymous artists allowed. Pick a name, pilgrim.')
+        messages.append('No anonymous poets allowed. Pick a name, pilgrim.')
     if email==None:
         messages.append('No, no, no. You have to enter a (valid) email.')
     if password==None:
@@ -89,8 +89,8 @@ def add_user(username=None, email=None, password=None):
 
 @app.route('/')
 def all_posts():
-    # posts = read_posts()
-    return render_template('base.html')
+    all_posts = read_posts()
+    return render_template('base.html', posts=all_posts)
 
 
 @app.route('/compose', methods=['GET', 'POST'])
@@ -101,6 +101,11 @@ def write_post():
 @app.route('/usercontrol')
 def login_register():
     return render_template('usercontrol.html')
+
+
+@app.route('/post/<id>', method='GET')
+def single_post_view():
+    return render_template('single_post.html', id=id)
 
 if __name__ == '__main__':
     manager.run()

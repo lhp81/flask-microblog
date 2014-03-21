@@ -1,9 +1,8 @@
-from flask import Flask, url_for
+from flask import Flask, url_for, render_template
 from flask.ext.sqlalchemy import SQLAlchemy
 from datetime import datetime
 from flask.ext.script import Manager
 from flask.ext.migrate import Migrate, MigrateCommand
-from flask import render_template
 from flask.ext.bootstrap import Bootstrap
 
 

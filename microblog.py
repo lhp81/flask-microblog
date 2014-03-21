@@ -51,7 +51,7 @@ class User(db.Model):
         return '<User %r>' % self.username
 
 
-def write_post(title, text, author):
+def write_post(title=None, text=None, author):
     new_post = Post(title, text, author)
     db.session.add(new_post)
     db.session.commit()

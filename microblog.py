@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, url_for
 from flask.ext.sqlalchemy import SQLAlchemy
 from datetime import datetime
 from flask.ext.script import Manager
@@ -93,9 +93,15 @@ def all_posts():
     # posts = read_posts()
     return render_template('base.html')
 
-# @app.route('/compose', methods=['GET', 'POST'])
-# def write_post():
-#     pass
+
+@app.route('/compose', methods=['GET', 'POST'])
+def write_post():
+    return render_template('compose.html')
+
+
+@app.route('/usercontrol')
+def login_register():
+    return render_template('usercontrol.html')
 
 if __name__ == '__main__':
     manager.run()

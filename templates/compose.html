@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+
+{% block title %}
+contribute a poem – {{super()}}
+{% endblock %}
+{% block navbar %}
+{{super()}}
+<ul class="breadcrumb">
+  <li><a href="/">Home</a></li>
+  <li class="active">contribute a poem</li>
+</ul>
+{% endblock %}
+{% block body_content %}
+<div class="container">
+<h3>Make the world a more beautiful place
+<br>Add some microflaskin' <i>poetry</i> below:</h3>
+</div>
+    {% if user %}
+        Hey, {{ user }}, let's write some microflaskin' <i>poetry</i>!!
+    {% else %}
+    <div class="panel panel-danger">
+  <div class="panel-heading">
+    <h3 class="panel-title">Hold your horses, non-conformist</h3>
+  </div>
+  <div class="panel-body">
+    You can't be a microflaskin' poet without having a microflaskin' username and
+    password.<br />
+    Why don't you go login or register now, and then come back and write your poem.<br>
+    This page ain't going anywhere. It'll be right here once you get done.
+  </div>
+</div>
+
+{% endif %}
+{% endblock %}

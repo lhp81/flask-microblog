@@ -1,0 +1,44 @@
+{% extends 'bootstrap/base.html' %}
+
+{% block title %}microflaskin' poetry{% endblock %}
+{% block styles %}
+{{super()}}
+<link rel="stylesheet"
+      href="static/bootstrap.css">
+{% endblock %}
+{% block navbar %}
+<div class="navbar navbar-inverse">
+  <div class="navbar-header">
+    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-responsive-collapse">
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </button>
+    <a class="navbar-brand" href="/">microflaskin' poetry</a>
+  </div>
+  <div class="navbar-collapse collapse navbar-responsive-collapse">
+    <ul class="nav navbar-nav">
+      <li class="dropdown">
+        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-user"> </span><b class="caret"></b></a>
+        <ul class="dropdown-menu">
+          <li><a href="#">Login</a></li>
+          <li><a href="#">Logout</a></li>
+          <li class="divider"></li>
+          <li><a href="#">Register</a></li>
+        </ul>
+      </li>
+      <li><a href="#" class="?"><span class="glyphicon glyphicon-pencil"></span></a></li>
+    </ul>
+  </div>
+</div>
+{% endblock %}
+{% block content %}
+<div class="container">
+<div class="jumbotron">
+  <h1>Well hello there!</h1>
+  <p>Take a look around; read some poems; and add your own, if the Muses start singin'.</p>
+  <p>This is microflaskin' <i>poetry</i>
+  <p><a class="btn btn-primary btn-lg">Login or Register</a></p>
+</div>
+</div>
+{% endblock %}

@@ -3,6 +3,8 @@ from flask.ext.sqlalchemy import SQLAlchemy
 from datetime import datetime
 from flask.ext.script import Manager
 from flask.ext.migrate import Migrate, MigrateCommand
+from flask import render_template
+from flask.ext.bootstrap import Bootstrap
 
 
 app = Flask(__name__)
@@ -10,6 +12,8 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///flaskblog'
 
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
+
+bootstrap = Bootstrap(app)
 
 manager = Manager(app)
 manager.add_command('db', MigrateCommand)
@@ -51,10 +55,10 @@ class User(db.Model):
         return '<User %r>' % self.username
 
 
-def write_post(title=None, text=None, author):
-    new_post = Post(title, text, author)
-    db.session.add(new_post)
-    db.session.commit()
+# def write_post(title=None, text=None, author):
+#     new_post = Post(title, text, author)
+#     db.session.add(new_post)
+#     db.session.commit()
 
 
 def read_posts():
@@ -67,27 +71,31 @@ def read_posts():
 def read_post(id):
     the_post = Post.query.filter_by(id=id).first()
     if not Post:
-        raise IndexError('You are a seeker.\n'
-                         'Sadly, that post doesn\'t exist!')
+        raise IndexError('Someone there is who cannot find a post.\n'
+                         'Oh, it\'s you!\n'
+                         'That post doesn\'t exist!')
     else:
         return the_post
 
+
 def add_user(username=None, email=None, password=None):
-    if username=None:
-        messages.append('You must have a username. Try again.')
-    if email=None:
-        messages.append('You must enter an email to register.')
-    if password=None:
-        messages.append('If you don\'t have a password, you can\'t log in.')
+    if username==None:
+        messages.append('No anonymous artists allowed. Pick a name, pilgrim.')
+    if email==None:
+        messages.append('No, no, no. You have to enter a (valid) email.')
+    if password==None:
+        messages.append('No password=your shit gets jacked. The internet is '
+                        'like Sparta with cat gifs. Enter a password, genius.')
 
 
 @app.route('/')
 def all_posts():
-    posts = read_posts()
-    return render_template('homepage.html', posts=posts)
+    # posts = read_posts()
+    return render_template('base.html')
 
-@app.route('/new', methods=['GET', 'POST'])
-def write_post()
+# @app.route('/compose', methods=['GET', 'POST'])
+# def write_post():
+#     pass
 
 if __name__ == '__main__':
-    manager.run(debug=True)
+    manager.run()

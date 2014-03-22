@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block title %}
+categories – {{super()}}
+{% endblock %}
+{% block navbar %}
+{{super()}}
+<ul class="breadcrumb">
+  <li><a href="/">Home</a></li>
+  <li class="active">categories</li>
+</ul>
+{% endblock %}
+{% block body_content %}

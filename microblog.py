@@ -1,4 +1,5 @@
 from flask import Flask, url_for, render_template
+# from flaskext.seasurf import SeaSurf
 from flask.ext.sqlalchemy import SQLAlchemy
 from datetime import datetime
 from flask.ext.script import Manager
@@ -8,14 +9,12 @@ from flask.ext.bootstrap import Bootstrap
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///flaskblog'
-
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
-
-bootstrap = Bootstrap(app)
-
 manager = Manager(app)
 manager.add_command('db', MigrateCommand)
+bootstrap = Bootstrap(app)
+# csrf = SeaSurf(app)
 
 
 class Post(db.Model):
@@ -89,8 +88,8 @@ def add_user(username=None, email=None, password=None):
 
 @app.route('/')
 def all_posts():
-    all_posts = read_posts()
-    return render_template('base.html', posts=all_posts)
+    # all_posts = read_posts()
+    return render_template('base.html')  # , posts=all_posts
 
 
 @app.route('/compose', methods=['GET', 'POST'])
@@ -103,9 +102,14 @@ def login_register():
     return render_template('usercontrol.html')
 
 
-@app.route('/post/<id>', method='GET')
-def single_post_view():
-    return render_template('single_post.html', id=id)
+@app.route('/categories')
+def show_categories():
+    return render_template('categories.html')
+
+
+# @app.route('/post/<id>', method='GET')
+# def single_post_view():
+#     return render_template('single_post.html', id=id)
 
 if __name__ == '__main__':
     manager.run()

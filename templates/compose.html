@@ -13,21 +13,22 @@ contribute a poem – {{super()}}
 {% block body_content %}
 <div class="container">
 <h3>Make the world a more beautiful place
-<br>Add some microflaskin' <i>poetry</i> below:</h3>
+<br>Let's make some microflaskin' <i>poetry</i>!!</h3>
+<br />
 </div>
     {% if user %}
-        Hey, {{ user }}, let's write some microflaskin' <i>poetry</i>!!
-        <br />Then the form goes here.
+        Hey, {{ user }}, let your creative juices flow below:<br />
+        Then the form goes here.
     {% else %}
     <div class="panel panel-danger">
   <div class="panel-heading">
     <h3 class="panel-title">Hold your horses, non-conformist</h3>
   </div>
   <div class="panel-body">
-    You can't be a microflaskin' poet without having a microflaskin' username and
-    password.<br />
-    Why don't you go login or register now, and then come back and write your poem.<br>
-    This page ain't going anywhere. It'll be right here once you get done.
+    You can't be a microflaskin' poet without a microflaskin' username and
+    password. Come on!<br />
+    Why don't you go <a href={{url_for('login_register')}}>login or register</a> now, and then come back and write your poem.
+    <p><br />Quick, before the Muse deserts you for a better writer who's better looking!</p>
   </div>
 </div>
 

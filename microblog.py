@@ -45,6 +45,7 @@ class User(db.Model):
     username = db.Column(db.String(20), unique=True)
     password = db.Column(db.String(40))
     email = db.Column(db.String, unique=True)
+    posts = db.relationship('Post', backref='author', lazy='dynamic')
 
     def __init__(self, username, password, email):
         self.username = username
@@ -53,12 +54,6 @@ class User(db.Model):
 
     def __repr__(self):
         return '<User %r>' % self.username
-
-
-# def write_post(title=None, text=None, author):
-#     new_post = Post(title, text, author)
-#     db.session.add(new_post)
-#     db.session.commit()
 
 
 def read_posts():
@@ -94,7 +89,10 @@ def all_posts():
 
 
 @app.route('/compose', methods=['GET', 'POST'])
-def write_post():
+def compose(title=None, text=None, author=session['current_user']):
+    new_post = Post(title, text, author)
+    db.session.add(new_post)
+    db.session.commit()
     return render_template('compose.html')
 
 
@@ -121,7 +119,9 @@ def show_categories():
 def logout():
     # remove the username from the session if it's there
     session.pop('username', None)
-    flash('You were logged out.')
+    session.pop('logged_in', None)
+    session.pop('user_id', None)
+    flash('You were logged out -- see you next time!')
     return redirect(url_for('all_posts'))
 
 # @app.route('/post/<id>', method='GET')

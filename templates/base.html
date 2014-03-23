@@ -21,7 +21,7 @@
       <li><a href={{url_for('login_register')}}><span class="glyphicon glyphicon-log-in"></span></a></li>
       <li><a href={{url_for('write_post')}}><span class="glyphicon glyphicon-pencil"></span></a></li>
       <li><a href={{url_for('show_categories')}}><span class="glyphicon glyphicon-sort-by-alphabet"></span></a></li>
-      <li><a href="#"><span class="glyphicon glyphicon-log-out"></span></a></li>
+      <li><a href={{url_for('logout')}}><span class="glyphicon glyphicon-log-out"></span></a></li>
     </ul>
   </div>
 </div>
@@ -43,7 +43,7 @@
 {% if session.logged_in %}
     <div class="jumbotron">
       <h1>Hey, {{ session['current_user'] }}, let's write some microflaskin' <i>poetry</i>!!</h1>
-        <br /><button type="button" class="btn btn-lg btn-success"><a href={{url_for('write_post')}}><span class="glyphicon glyphicon-pencil"></span>I want to write!</a></button>
+        <br /><button type="button" class="btn btn-lg"><a href={{url_for('write_post')}}><span class="glyphicon glyphicon-pencil"></span>I want to write!</a></button>
     </div>
 {% else %}
 <div class="jumbotron">
@@ -62,7 +62,7 @@
     </tr>
   </thead>
   <tbody>
-  {% for post in posts %}
+  {% for post in self.posts %}
     <tr>
       <td>[{{ post.title }}]</td>
       <td>[{{ post.author }}]</td>
@@ -78,7 +78,6 @@
       <td>Seriously, log in</td>
       <td>and fix this!</td>
     </tr>
-
   {% endfor %}
   </tbody>
   </table>

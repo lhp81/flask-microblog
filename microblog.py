@@ -110,6 +110,11 @@ def login_register():
     return render_template('usercontrol.html')
 
 
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    return render_template('register.html')
+
+
 @app.route('/categories')
 def show_categories():
     return render_template('categories.html')

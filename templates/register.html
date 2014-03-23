@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block title %}
+register – {{super()}}
+<ul class="breadcrumb">
+  <li><a href="/">Home</a></li>
+  <li class="active">login/register</li>
+</ul>
+{% endblock %}
+{% block body_content %}
+<h1>A new poet? That's great, but have you thought about a career in banking?</h1>
+<form>
+<form method="POST">
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token() }}">
+    <input type="text" name="username" placeholder="username"/>
+    <input type="password" name="password" placeholder="password" />
+    <input type="email" name="email" placeholder="email" />
+    <input type="submit" value="Log In"/>
+<form>

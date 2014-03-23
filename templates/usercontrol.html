@@ -13,7 +13,15 @@ login/register – {{super()}}
 {% block body_content %}
 <h3>let's get you into your account, 朋友.</h3>
 <br />
-<ul class="nav nav-tabs" style="margin-bottom: 15px;">
+
+<form method="POST">
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token() }}">
+    <input type="text" name="username" placeholder="Username"/>
+    <input type="password" name="password" placeholder="Password" />
+    <input type="submit" value="Log In"/>
+<form>
+
+<!-- <ul class="nav nav-tabs" style="margin-bottom: 15px;">
   <li class="active"><a href="#login" data-toggle="tab">Login</a></li>
   <li class=""><a href="#register" data-toggle="tab">Register</a></li>
 </ul>
@@ -24,9 +32,9 @@ login/register – {{super()}}
     <legend>Login</legend>
     <input type="hidden" name="_csrf_token" value="{{ csrf_token() }}">
     <div class="form-group">
-      <label for="login" class="col-lg-2 control-label">Enter your login</label>
+      <label for="inputUsername" class="col-lg-2 control-label">Enter your username</label>
       <div class="col-lg-10">
-        <input type="text" class="form-control" id="login" placeholder="login">
+        <input type="text" class="form-control" id="username" placeholder="username">
       </div>
     </div>
     <div class="form-group">
@@ -48,9 +56,9 @@ login/register – {{super()}}
     <legend>Get yourself a microflaskin' login! All fields are required.</legend>
       <input type="hidden" name="_csrf_token" value="{{ csrf_token() }}">
     <div class="form-group">
-      <label for="login" class="col-lg-2 control-label">Login</label>
+      <label for="username" class="col-lg-2 control-label">Username</label>
       <div class="col-lg-10">
-        <input type="text" class="form-control" id="login" placeholder="login">
+        <input type="text" class="form-control" id="username" placeholder="username">
       </div>
     </div>
 
@@ -75,7 +83,8 @@ login/register – {{super()}}
   </fieldset>
   <input type="hidden" name="_csrf_token" value="{{ csrf_token() }}">
 </form>  </div>
-</div>
+</div> -->
+
 {% endblock %}
 <!-- Here is the stuff for CSERF. I gotta do this in every form:
 <form method="POST">

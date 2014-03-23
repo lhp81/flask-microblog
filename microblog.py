@@ -24,16 +24,16 @@ class Post(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(100), unique=True)
     body = db.Column(db.Text)
-    author = db.Column(db.Integer, db.ForeignKey('user.id'))
+    author = db.Column(db.Integer, db.ForeignKey('users.id'))
     pub_date = db.Column(db.DateTime)
 
     def __init__(self, title, body, author, pub_date=None):
         self.title = title
         self.body = body
+        self.author = author
         if pub_date is None:
             pub_date = datetime.utcnow()
         self.pub_date = pub_date
-        self.author = author
 
     def __repr__(self):
         return '<Post %r>' % self.title
@@ -106,7 +106,7 @@ def login_register():
             session['logged_in'] = True
             session['current_user'] = request.form['username']
             flash('You are logged in')
-            return redirect(url_for('list_view'))
+            return redirect(url_for('all_posts'))
         else:
             flash('Dude, you muffed it. Try logging in again.')
     return render_template('usercontrol.html')

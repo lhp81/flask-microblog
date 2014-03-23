@@ -102,7 +102,13 @@ def write_post():
 def login_register():
     if request.method == 'POST':
         user = User.query.filter_by(username=request.form['username']).first()
-
+        if user and request.form['password'] == user.password:
+            session['logged_in'] = True
+            session['current_user'] = request.form['username']
+            flash('You are logged in')
+            return redirect(url_for('list_view'))
+        else:
+            flash('Dude, you muffed it. Try logging in again.')
     return render_template('usercontrol.html')
 
 

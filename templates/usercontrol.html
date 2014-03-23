@@ -73,6 +73,7 @@ login/register – {{super()}}
       </div>
     </div>
   </fieldset>
+  <input type="hidden" name="_csrf_token" value="{{ csrf_token() }}">
 </form>  </div>
 </div>
 {% endblock %}

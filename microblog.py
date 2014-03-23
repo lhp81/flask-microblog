@@ -24,8 +24,8 @@ class Post(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(100), unique=True)
     body = db.Column(db.Text)
+    author = db.Column(db.Integer, db.ForeignKey('user.id'))
     pub_date = db.Column(db.DateTime)
-    author = db.Column(db.Integer, db.ForeignKey('users.id'))
 
     def __init__(self, title, body, author, pub_date=None):
         self.title = title

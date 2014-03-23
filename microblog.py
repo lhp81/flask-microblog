@@ -1,4 +1,5 @@
-from flask import Flask, session, url_for, render_template, redirect, flash
+from flask import (Flask, session, url_for, render_template, redirect, flash,
+                   request)
 from flask.ext.seasurf import SeaSurf
 from flask.ext.sqlalchemy import SQLAlchemy
 from datetime import datetime
@@ -99,6 +100,9 @@ def write_post():
 
 @app.route('/usercontrol', methods=['GET', 'POST'])
 def login_register():
+    if request.method == 'POST':
+        user = User.query.filter_by(username=request.form['username']).first()
+
     return render_template('usercontrol.html')
 
 
@@ -112,7 +116,7 @@ def logout():
     # remove the username from the session if it's there
     session.pop('username', None)
     flash('You were logged out.')
-    return redirect(url_for('/'))
+    return redirect(url_for('all_posts'))
 
 # @app.route('/post/<id>', method='GET')
 # def single_post_view():

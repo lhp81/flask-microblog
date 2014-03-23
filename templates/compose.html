@@ -16,8 +16,8 @@ contribute a poem – {{super()}}
 <br>Let's make some microflaskin' <i>poetry</i>!!</h3>
 <br />
 </div>
-    {% if user %}
-        Hey, {{ user }}, let your creative juices flow below:<br />
+    {% if session.logged_in %}
+        Hey, {{ session['current_user'] }}, let your creative juices flow below:<br />
         Then the form goes here.
     {% else %}
     <div class="panel panel-danger">

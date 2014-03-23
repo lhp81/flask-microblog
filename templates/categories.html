@@ -11,3 +11,14 @@ categories – {{super()}}
 </ul>
 {% endblock %}
 {% block body_content %}
+<h1>poems by type</h1>
+<p>Here are the different types of poems available on the site:</p>
+<ul>
+{% for category in categories %}
+<li>[{{ category.name }}]</li>
+{% else %}
+<li>Oh damn, there are no types of poems yet!</li>
+<li>Or maybe you broke me!</li>
+<li>I'm telling dad when he gets home!</li>
+{% endfor %}
+{% endblock %}

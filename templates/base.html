@@ -20,6 +20,7 @@
     <ul class="nav navbar-nav navbar-right">
       <li><a href={{url_for('login_register')}}><span class="glyphicon glyphicon-log-in"></span></a></li>
       <li><a href={{url_for('write_post')}}><span class="glyphicon glyphicon-pencil"></span></a></li>
+      <li><a href={{url_for('show_categories')}}><span class="glyphicon glyphicon-sort-by-alphabet"></span></a></li>
       <li><a href="#"><span class="glyphicon glyphicon-log-out"></span></a></li>
     </ul>
   </div>
@@ -44,7 +45,7 @@
       <h1>Hey, {{ user }}, let's write some microflaskin' <i>poetry</i>!!</h1>
         <br /><button type="button" class="btn btn-lg btn-success"><a href={{url_for('write_post')}}><span class="glyphicon glyphicon-pencil"></span>I want to write!</a></button>
     </div>
-    {% else %}
+{% else %}
 <div class="jumbotron">
   <h1>Well hello there!</h1>
   <p>Take a look around, read some poems, and add your own if the Muses start singin'.</p>

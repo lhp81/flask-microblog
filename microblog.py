@@ -1,5 +1,5 @@
-from flask import Flask, url_for, render_template
-# from flaskext.seasurf import SeaSurf
+from flask import Flask, session, url_for, render_template, redirect, flash
+from flask.ext.seasurf import SeaSurf
 from flask.ext.sqlalchemy import SQLAlchemy
 from datetime import datetime
 from flask.ext.script import Manager
@@ -9,12 +9,13 @@ from flask.ext.bootstrap import Bootstrap
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///flaskblog'
+app.secret_key = 'thiskeyissecret'
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 manager = Manager(app)
 manager.add_command('db', MigrateCommand)
 bootstrap = Bootstrap(app)
-# csrf = SeaSurf(app)
+csrf = SeaSurf(app)
 
 
 class Post(db.Model):
@@ -42,7 +43,7 @@ class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(20), unique=True)
     password = db.Column(db.String(40))
-    email = db.Column(db.String)
+    email = db.Column(db.String, unique=True)
 
     def __init__(self, username, password, email):
         self.username = username
@@ -78,12 +79,11 @@ def read_post(id):
 
 def add_user(username=None, email=None, password=None):
     if username==None:
-        messages.append('No anonymous poets allowed. Pick a name, pilgrim.')
+        flash('No anonymous poets allowed. Pick a name, pilgrim.')
     if email==None:
-        messages.append('No, no, no. You have to enter a (valid) email.')
+        flash('No, no, no. You have to enter a (valid) email.')
     if password==None:
-        messages.append('No password=your shit gets jacked. The internet is '
-                        'like Sparta with cat gifs. Enter a password, genius.')
+        flash('No password=your shit gets jacked. Enter a password, amigo.')
 
 
 @app.route('/')
@@ -97,7 +97,7 @@ def write_post():
     return render_template('compose.html')
 
 
-@app.route('/usercontrol')
+@app.route('/usercontrol', methods=['GET', 'POST'])
 def login_register():
     return render_template('usercontrol.html')
 
@@ -106,6 +106,13 @@ def login_register():
 def show_categories():
     return render_template('categories.html')
 
+
+@app.route('/logout')
+def logout():
+    # remove the username from the session if it's there
+    session.pop('username', None)
+    flash('You were logged out.')
+    return redirect(url_for('/'))
 
 # @app.route('/post/<id>', method='GET')
 # def single_post_view():

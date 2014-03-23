@@ -28,9 +28,16 @@ contribute a poem – {{super()}}
     You can't be a microflaskin' poet without a microflaskin' username and
     password. Come on!<br />
     Why don't you go <a href={{url_for('login_register')}}>login or register</a> now, and then come back and write your poem.
-    <p><br />Quick, before the Muse deserts you for a better writer who's better looking!</p>
+    <p><br />Quick, before the Muse deserts you for a more deserving, better looking writer who <i>never</i> gets writer's block!<br />Hurry!</p>
   </div>
 </div>
 
 {% endif %}
 {% endblock %}
+
+<!-- Here is the stuff for CSERF. I gotta do this in every form:
+<form method="POST">
+    ...
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token() }}">
+</form>
+ -->

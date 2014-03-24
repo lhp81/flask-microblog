@@ -21,12 +21,6 @@ login – {{super()}}
     <input type="submit" value="Log In"/>
 <form>
 
-<!-- <ul class="nav nav-tabs" style="margin-bottom: 15px;">
-  <li class="active"><a href="#login" data-toggle="tab">Login</a></li>
-  <li class=""><a href="#register" data-toggle="tab">Register</a></li>
-</ul>
-<div id="myTabContent" class="tab-content">
-  <div class="tab-pane fade active in" id="login">
 <form class="form-horizontal" method="POST">
   <fieldset>
     <legend>Login</legend>
@@ -49,46 +43,5 @@ login – {{super()}}
       </div>
   </fieldset>
 </form>
-  </div>
-  <div class="tab-pane fade" id="register">
-<form class="form-horizontal" method="POST">
-  <fieldset>
-    <legend>Get yourself a microflaskin' login! All fields are required.</legend>
-      <input type="hidden" name="_csrf_token" value="{{ csrf_token() }}">
-    <div class="form-group">
-      <label for="username" class="col-lg-2 control-label">Username</label>
-      <div class="col-lg-10">
-        <input type="text" class="form-control" id="username" placeholder="username">
-      </div>
-    </div>
-
-    <div class="form-group">
-      <label for="email" class="col-lg-2 control-label">Email</label>
-      <div class="col-lg-10">
-        <input type="email" class="form-control" id="email" placeholder="email">
-      </div>
-    </div>
-        <div class="form-group">
-      <label for="inputPassword" class="col-lg-2 control-label">Password</label>
-      <div class="col-lg-10">
-        <input type="password" class="form-control" id="inputPassword" placeholder="password">
-      </div>
-    </div>
-    <div class="form-group">
-      <div class="col-lg-10 col-lg-offset-2">
-        <button class="btn btn-default">Cancel</button>
-        <button type="submit" class="btn btn-primary">Submit</button>
-      </div>
-    </div>
-  </fieldset>
-  <input type="hidden" name="_csrf_token" value="{{ csrf_token() }}">
-</form>  </div>
-</div> -->
 
 {% endblock %}
-<!-- Here is the stuff for CSERF. I gotta do this in every form:
-<form method="POST">
-    ...
-    <input type="hidden" name="_csrf_token" value="{{ csrf_token() }}">
-</form>
- -->

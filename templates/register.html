@@ -8,7 +8,8 @@ register – {{super()}}
 </ul>
 {% endblock %}
 {% block body_content %}
-<h1>A new poet? That's great, but have you thought about a career in banking?</h1>
+<h1>A new poet? That's great, but have you thought about a career in banking?</h1><br />
+<h3>Seriously. Or maybe as a hunter gatherer? Both make more money.</h3>
 <form>
 <form method="POST">
     <input type="hidden" name="_csrf_token" value="{{ csrf_token() }}">
@@ -17,3 +18,36 @@ register – {{super()}}
     <input type="email" name="email" placeholder="email" />
     <input type="submit" value="Log In"/>
 <form>
+
+<form class="form-horizontal" method="POST">
+  <fieldset>
+    <legend>Get yourself a microflaskin' login! All fields are required.</legend>
+      <input type="hidden" name="_csrf_token" value="{{ csrf_token() }}">
+    <div class="form-group">
+      <label for="username" class="col-lg-2 control-label">Username</label>
+      <div class="col-lg-10">
+        <input type="text" class="form-control" id="username" placeholder="username">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="email" class="col-lg-2 control-label">Email</label>
+      <div class="col-lg-10">
+        <input type="email" class="form-control" id="email" placeholder="email">
+      </div>
+    </div>
+        <div class="form-group">
+      <label for="inputPassword" class="col-lg-2 control-label">Password</label>
+      <div class="col-lg-10">
+        <input type="password" class="form-control" id="inputPassword" placeholder="password">
+      </div>
+    </div>
+    <div class="form-group">
+      <div class="col-lg-10 col-lg-offset-2">
+        <button class="btn btn-default">Cancel</button>
+        <button type="submit" class="btn btn-primary">Submit</button>
+      </div>
+    </div>
+  </fieldset>
+  <input type="hidden" name="_csrf_token" value="{{ csrf_token() }}">
+</form>

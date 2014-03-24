@@ -10,6 +10,14 @@ from flask.ext.bootstrap import Bootstrap
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///flaskblog'
+# app.config.update(
+#     MAIL_SERVER='smtp.gmail.com',
+#     MAIL_PORT=465,
+#     MAIL_USE_SSL=True,
+#     MAIL_USERNAME='microflaskinpoetry@gmail.com',
+#     MAIL_PASSWORD="modernartisbullshitandi'maphilistine",
+#     MAIL_DEFAULT_SENDER=('Grumpy McNasty', 'microflaskinpoetry@gmail.com'))
+
 app.secret_key = 'thiskeyissecret'
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
@@ -17,6 +25,7 @@ manager = Manager(app)
 manager.add_command('db', MigrateCommand)
 bootstrap = Bootstrap(app)
 csrf = SeaSurf(app)
+# mail = Mail(app)
 
 
 class Post(db.Model):
@@ -67,8 +76,8 @@ def read_post(id):
     the_post = Post.query.filter_by(id=id).first()
     if not Post:
         raise IndexError('Someone there is who cannot find a post.\n'
-                         'Oh, it\'s you!\n'
-                         'That post doesn\'t exist!')
+                         'Oh snap, it\'s you!\n'
+                         '<strong>That post doesn\'t exist!</strong>')
     else:
         return the_post
 
@@ -89,8 +98,8 @@ def all_posts():
 
 
 @app.route('/compose', methods=['GET', 'POST'])
-def compose(title=None, text=None, author=session['current_user']):
-    new_post = Post(title, text, author)
+def compose(title, text, author=['current_user'], pub_date=None):
+    new_post = Post(title, text, author=session['current_user'], pub_date=None)
     db.session.add(new_post)
     db.session.commit()
     return render_template('compose.html')

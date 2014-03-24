@@ -19,7 +19,7 @@
   <div class="navbar-collapse collapse navbar-responsive-collapse">
     <ul class="nav navbar-nav navbar-right">
       <li><a href={{url_for('login_register')}}><span class="glyphicon glyphicon-log-in"></span></a></li>
-      <li><a href={{url_for('write_post')}}><span class="glyphicon glyphicon-pencil"></span></a></li>
+      <li><a href={{url_for('compose')}}><span class="glyphicon glyphicon-pencil"></span></a></li>
       <li><a href={{url_for('show_categories')}}><span class="glyphicon glyphicon-sort-by-alphabet"></span></a></li>
       <li><a href={{url_for('logout')}}><span class="glyphicon glyphicon-log-out"></span></a></li>
     </ul>
@@ -43,7 +43,7 @@
 {% if session.logged_in %}
     <div class="jumbotron">
       <h1>Hey, {{ session['current_user'] }}, let's write some microflaskin' <i>poetry</i>!!</h1>
-        <br /><button type="button" class="btn btn-lg"><a href={{url_for('write_post')}}><span class="glyphicon glyphicon-pencil"></span>I want to write!</a></button>
+        <br /><button type="button" class="btn btn-lg"><a href={{url_for('compose')}}><span class="glyphicon glyphicon-pencil"></span>I want to write!</a></button>
     </div>
 {% else %}
 <div class="jumbotron">
@@ -56,7 +56,7 @@
 <table class="table table-striped table-hover ">
   <thead>
     <tr>
-      <th>#</th>
+      <th>Post #</th>
       <th>Poem</th>
       <th>Poet</th>
     </tr>

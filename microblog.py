@@ -93,15 +93,15 @@ def add_user(username=None, email=None, password=None):
 
 @app.route('/')
 def all_posts():
-    # all_posts = read_posts()
+    all_posts = read_posts()
     return render_template('base.html')  # , posts=all_posts
 
 
 @app.route('/compose', methods=['GET', 'POST'])
-def compose(title, text, author=['current_user'], pub_date=None):
-    new_post = Post(title, text, author=session['current_user'], pub_date=None)
-    db.session.add(new_post)
-    db.session.commit()
+def compose():  # title, text, author=['current_user'], pub_date=None
+    # new_post = Post(title, text, author=session['current_user'], pub_date=None)
+    # db.session.add(new_post)
+    # db.session.commit()
     return render_template('compose.html')
 
 

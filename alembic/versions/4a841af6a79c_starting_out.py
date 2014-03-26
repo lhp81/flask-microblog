@@ -1,13 +1,13 @@
-"""create account table
+"""starting out
 
-Revision ID: 57e12c7a39ee
+Revision ID: 4a841af6a79c
 Revises: None
-Create Date: 2014-03-25 21:51:50.535057
+Create Date: 2014-03-25 22:43:29.987097
 
 """
 
 # revision identifiers, used by Alembic.
-revision = '57e12c7a39ee'
+revision = '4a841af6a79c'
 down_revision = None
 
 from alembic import op

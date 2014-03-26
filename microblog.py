@@ -24,7 +24,7 @@ class Post(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(80), unique=True)
     body = db.Column(db.Text)
-    author = db.Column(db.String, db.ForeignKey('users.id'))
+    author = db.Column(db.String)
     pub_date = db.Column(db.DateTime)
 
     def __init__(self, title, body, author, pub_date=None):
@@ -81,19 +81,16 @@ def write_post(title, text, author):
 
 def read_posts():
     """Display posts in reverse order."""
-    all_posts = Post.query().order_by(Post.id.desc()).all()
-    # the above was taken from our in-class code review
-    return all_posts
+    return Post.query().order_by(Post.id.desc()).all()
 
-
-def read_post(id):
-    the_post = Post.query.filter_by(id=id).first()
-    if not Post:
-        raise IndexError('Someone there is who cannot find a post.\n'
-                         'Oh, it\'s you!\n'
-                         'That post doesn\'t exist!')
-    else:
-        return the_post
+# def read_post(id):
+#     the_post = Post.query.filter_by(id=id).first()
+#     if not Post:
+#         raise IndexError('Someone there is who cannot find a post.\n'
+#                          'Oh, it\'s you!\n'
+#                          'That post doesn\'t exist!')
+#     else:
+#         return the_post
 
 
 def add_user(username=None, email=None, password=None):
@@ -107,8 +104,8 @@ def add_user(username=None, email=None, password=None):
 
 @app.route('/')
 def all_posts():
-    # all_posts = read_posts()
-    return render_template('base.html')  # , posts=all_posts
+    posts = read_posts()
+    return render_template('base.html', posts=posts)
 
 
 @app.route('/compose', methods=['GET', 'POST'])

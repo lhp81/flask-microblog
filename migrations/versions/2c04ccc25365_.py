@@ -22,7 +22,6 @@ def upgrade():
     sa.Column('body', sa.Text(), nullable=True),
     sa.Column('author', sa.String(), nullable=True),
     sa.Column('pub_date', sa.DateTime(), nullable=True),
-    sa.ForeignKeyConstraint(['author'], ['users.id'], ),
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('title')
     )

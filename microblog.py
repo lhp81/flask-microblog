@@ -76,12 +76,13 @@ def write_post(title, text, author):
         db.session.add(new_post)
         db.session.commit()
     else:
-        flash("A post isn't a post without a title and some content.")
+        flash("A poem isn't a poem without a title and some content.\n"
+              "Don't get all cute and post-modern on me.")
 
 
 def read_posts():
     """Display posts in reverse order."""
-    return Post.query().order_by(Post.id.desc()).all()
+    return Post.query.order_by(Post.id.desc()).all()
 
 # def read_post(id):
 #     the_post = Post.query.filter_by(id=id).first()
@@ -93,7 +94,7 @@ def read_posts():
 #         return the_post
 
 
-def add_user(username=None, email=None, password=None):
+def add_user(username, email, password):
     if username==None:
         flash('No anonymous poets allowed. Pick a name, pilgrim.')
     elif email==None:
@@ -104,8 +105,8 @@ def add_user(username=None, email=None, password=None):
 
 @app.route('/')
 def all_posts():
-    posts = read_posts()
-    return render_template('base.html', posts=posts)
+    the_posts = read_posts()
+    return render_template('base.html', posts=the_posts)
 
 
 @app.route('/compose', methods=['GET', 'POST'])
@@ -163,9 +164,17 @@ def logout():
     flash('You were logged out -- see you next time!')
     return redirect(url_for('all_posts'))
 
-# @app.route('/post/<id>', method='GET')
-# def single_post_view():
-#     return render_template('single_post.html', id=id)
+@app.route('/post/<id>')
+def single_poem(id):
+    poem = read_poem(id)
+    return render_template('poem.html', id=id)
+
+def read_poem(id):
+    """Retrieve a single post by its id."""
+    post = Post.query.filter_by(id=str(id)).first()
+    if post is None:
+        raise NotFoundError("There exists no post with the specified id.")
+    return post
 
 if __name__ == '__main__':
     manager.run()

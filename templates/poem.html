@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block title %}
+read a poem – {{super()}}
+{% endblock %}
+{% block navbar %}
+{{super()}}
+<ul class="breadcrumb">
+  <li><a href="/">Home</a></li>
+  <li class="active">read a poem</li>
+</ul>
+{% endblock %}
+{% block body_content %}
+
+    <h2>{{ post.title }}</h2>
+    <i>contributed by {{ post.author.username }} on {{ post.timestamp }}</i>
+    {% for line in post.body.split('\r\n') %}
+    <p>{{ line }}</p>
+    {% endfor %}
+
+
+{% endblock %}

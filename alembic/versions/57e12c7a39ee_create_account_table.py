@@ -1,13 +1,13 @@
-"""first migration
+"""create account table
 
-Revision ID: 2f53b43b73ec
+Revision ID: 57e12c7a39ee
 Revises: None
-Create Date: 2014-03-22 12:02:31.790942
+Create Date: 2014-03-25 21:51:50.535057
 
 """
 
 # revision identifiers, used by Alembic.
-revision = '2f53b43b73ec'
+revision = '57e12c7a39ee'
 down_revision = None
 
 from alembic import op

@@ -13,15 +13,15 @@ contribute a poem – {{super()}}
 {% block body_content %}
 <div class="container">
 <h3>Make the world a more beautiful place
-<br>Let's make some microflaskin' <i>poetry</i>!!</h3>
+<br>Let's write some microflaskin' <i>poetry</i>!!</h3>
 <br />
     {% if session.logged_in %}
         Hey, {{ session['current_user'] }}, let your creative juices flow below:<br />
         <form method="POST" id="newpost">
     <input type="hidden" name="_csrf_token" value="{{ csrf_token() }}"><br />
-    <input type="text" name="title" placeholder="Title" maxlength="255" /><br />
-    <textarea form="newpost" name="body" placeholder="Body"></textarea><br />
-    <input type="submit" name="submit" />
+    <input type="text" name="title" class="form-control" placeholder="Title" maxlength="255" /><br />
+    <textarea type="textarea" name="body" class="form-control" placeholder="Body"></textarea><br />
+    <input type="submit" class="btn btn-primary" name="submit" />
 
     {% else %}
     <div class="panel panel-danger">
@@ -31,7 +31,7 @@ contribute a poem – {{super()}}
   <div class="panel-body">
     You can't be a microflaskin' poet without a microflaskin' username and
     password. Come on!<br />
-    Why don't you go <a href={{url_for('login_register')}}>login or register</a> now, and then come back and write your poem.
+    Why don't you go <a href={{url_for('login_register')}}>login</a> or <a href={{url_for('register_user')}}>register</a> now, and then come back and write your poem.
     <p><br />Quick, before the Muse deserts you for a more deserving, better looking writer who <i>never</i> gets writer's block!<br />Hurry!</p>
   </div>
   </div>

@@ -10,14 +10,6 @@ from flask.ext.bootstrap import Bootstrap
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///flaskblog'
-# app.config.update(
-#     MAIL_SERVER='smtp.gmail.com',
-#     MAIL_PORT=465,
-#     MAIL_USE_SSL=True,
-#     MAIL_USERNAME='microflaskinpoetry@gmail.com',
-#     MAIL_PASSWORD="modernartisbullshitandi'maphilistine",
-#     MAIL_DEFAULT_SENDER=('Grumpy McNasty', 'microflaskinpoetry@gmail.com'))
-
 app.secret_key = 'thiskeyissecret'
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
@@ -25,21 +17,21 @@ manager = Manager(app)
 manager.add_command('db', MigrateCommand)
 bootstrap = Bootstrap(app)
 csrf = SeaSurf(app)
-# mail = Mail(app)
 
 
 class Post(db.Model):
     __tablename__ = 'posts'
     id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(100), unique=True)
+    title = db.Column(db.String(80), unique=True)
     body = db.Column(db.Text)
-    author = db.Column(db.Integer, db.ForeignKey('users.id'))
+    author = db.Column(db.String, db.ForeignKey('users.id'))
     pub_date = db.Column(db.DateTime)
 
     def __init__(self, title, body, author, pub_date=None):
         self.title = title
         self.body = body
         self.author = author
+        # self.category = category
         if pub_date is None:
             pub_date = datetime.utcnow()
         self.pub_date = pub_date
@@ -48,21 +40,43 @@ class Post(db.Model):
         return '<Post %r>' % self.title
 
 
+# class Category(db.Model):
+#     __tablename__ = 'categories'
+#     id = db.Column(db.Integer, primary_key=True)
+#     name = db.Column(db.String(50))
+
+#     def __init__(self, name):
+#         self.name = name
+
+#     def __repr__(self):
+#         return '<Category %r>' % self.name
+
+
 class User(db.Model):
     __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(20), unique=True)
     password = db.Column(db.String(40))
     email = db.Column(db.String, unique=True)
-    posts = db.relationship('Post', backref='author', lazy='dynamic')
+    # confirmed = db.Column(db.Boolean)
 
     def __init__(self, username, password, email):
         self.username = username
         self.password = password
         self.email = email
+        # self.confirmed = False
 
     def __repr__(self):
         return '<User %r>' % self.username
+
+
+def write_post(title, text, author):
+    if title and text:
+        new_post = Post(title, text, author)
+        db.session.add(new_post)
+        db.session.commit()
+    else:
+        flash("A post isn't a post without a title and some content.")
 
 
 def read_posts():
@@ -76,8 +90,8 @@ def read_post(id):
     the_post = Post.query.filter_by(id=id).first()
     if not Post:
         raise IndexError('Someone there is who cannot find a post.\n'
-                         'Oh snap, it\'s you!\n'
-                         '<strong>That post doesn\'t exist!</strong>')
+                         'Oh, it\'s you!\n'
+                         'That post doesn\'t exist!')
     else:
         return the_post
 
@@ -85,23 +99,30 @@ def read_post(id):
 def add_user(username=None, email=None, password=None):
     if username==None:
         flash('No anonymous poets allowed. Pick a name, pilgrim.')
-    if email==None:
+    elif email==None:
         flash('No, no, no. You have to enter a (valid) email.')
-    if password==None:
-        flash('No password=your shit gets jacked. Enter a password, amigo.')
+    elif password==None:
+        flash('Enter a password, amigo. This isn\'t a perfect world.')
 
 
 @app.route('/')
 def all_posts():
-    all_posts = read_posts()
+    # all_posts = read_posts()
     return render_template('base.html')  # , posts=all_posts
 
 
 @app.route('/compose', methods=['GET', 'POST'])
-def compose():  # title, text, author=['current_user'], pub_date=None
-    # new_post = Post(title, text, author=session['current_user'], pub_date=None)
-    # db.session.add(new_post)
-    # db.session.commit()
+def add_poem():
+    if 'logged_in'in session and session['logged_in']:
+        if request.method == "POST":
+            try:
+                # author = User.username == session['current_user']
+                write_post(request.form['title'],
+                           request.form['body'],
+                           session['current_user'])
+                return redirect(url_for('all_posts'))
+            except ValueError:
+                flash("Error: title and text required")
     return render_template('compose.html')
 
 
@@ -120,7 +141,14 @@ def login_register():
 
 
 @app.route('/register', methods=['GET', 'POST'])
-def register():
+def register_user():
+    # if request.method == 'POST':
+    #     asdf
+    #     if x:
+    #         y
+    #     else:
+    #         flash('Thanks for registering. Check your email for a confirmation link.')
+    #         return render_template('base.html')
     return render_template('register.html')
 
 

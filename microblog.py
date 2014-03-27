@@ -6,13 +6,18 @@ from datetime import datetime
 from flask.ext.script import Manager
 from flask.ext.migrate import Migrate, MigrateCommand
 from flask.ext.bootstrap import Bootstrap
-import os
-from flask.ext.mail import Mail, Message
+from flask_mail import Mail, Message
 
 
 app = Flask(__name__)
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///flaskblog'
+app.config['MAIL_SERVER'] = 'smtp.gmail.com'
+app.config['MAIL_PORT']= 465
+app.config['MAIL_USE_SSL'] = True
+app.config['MAIL_USERNAME'] = '@gmail.com'
+app.config['MAIL_PASSWORD'] = 'modernartisbullshitandi\'maphilistine'
+app.config['MAIL_DEFAULT_SENDER'] = ('the head poet', 'microflaskinpoetry@gmail.com')
 
 app.secret_key = 'thiskeyissecret'
 
@@ -27,14 +32,6 @@ bootstrap = Bootstrap(app)
 csrf = SeaSurf(app)
 
 mail = Mail(app)
-
-app.config['MAIL_SERVER'] = 'smtp.googlemail.com'
-app.config['MAIL_PORT'] = 587
-app.config['MAIL_USE_TLS'] = True
-app.config['MAIL_USERNAME'] = os.environ.get('MAIL_USERNAME')
-app.config['MAIL_PASSWORD'] = os.environ.get('MAIL_PASSWORD')
-app.config['MICROBLOG_MAIL_SUBJECT_PREFIX'] = '[mf\'n poetry]'
-app.config['MICROBLOG_MAIL_SENDER'] = 'the head poet <microflaskinpoetry@gmail.com>'
 
 
 class Post(db.Model):
@@ -119,6 +116,9 @@ def add_user(username, email, password):
         flash('No, no, no. You have to enter a (valid) email.')
     elif password==None:
         flash('Enter a password, amigo. This isn\'t a perfect world.')
+    else:
+        if username and email and password:
+            
 
 
 @app.route('/')
@@ -152,12 +152,8 @@ def login_register():
     return render_template('usercontrol.html')
 
 
-def send_email(to, subject, template, **kwargs):
-    msg = Message(app.config['MICROBLOG_MAIL_SUBJECT_PREFIX'] + subject,
-                  sender=app.config['MICROBLOG_MAIL_SENDER'], recipients=[to])
-    msg.body = render_template(template + '.txt', **kwargs)
-    msg.html = render_template(template + '.html', **kwargs)
-    mail.send(msg)
+
+
 
 @app.route('/register', methods=['GET', 'POST'])
 def register_user():

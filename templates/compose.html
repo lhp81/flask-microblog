@@ -16,7 +16,7 @@ contribute a poem – {{super()}}
 <br>Let's write some microflaskin' <i>poetry</i>!!</h3>
 <br />
     {% if session.logged_in %}
-        Hey, {{ session['current_user'] }}, let your creative juices flow below:<br />
+        Howdy, {{ session['current_user'] }}, let your creative juices flow below:<br />
         <form method="POST" id="newpost">
     <input type="hidden" name="_csrf_token" value="{{ csrf_token() }}"><br />
     <input type="text" name="title" class="form-control" placeholder="Title" maxlength="255" /><br />

@@ -33,27 +33,28 @@
   {% for message in messages %}
 <div class="alert alert-dismissable alert-warning">
   <button type="button" class="close" data-dismiss="alert">×</button>
-  <h4>Hey!</h4>
+  <h4>NEWS FLASH!</h4>
   <p>{{ message }}
   </p></div>
     {% endfor %}
   {% endif %}
 {% endwith %}
 {% block body_content %}
-{% if session.logged_in %}
-    <div class="jumbotron">
-      <h1>{{ session['current_user'] }}, it's <i>great</i> to see you.<br />
-          Let's write!!</h1>
-        <br /><button type="button" class="btn btn-lg"><a href={{url_for('add_poem')}}><span class="glyphicon glyphicon-pencil"></span>Pens out!</a></button>
+{% if not session.logged_in %}
+{#     <div class="jumbotron">
+      <h1>word, {{ session['current_user'] }}<br />
+          let's write</h1>
+        <br /><button type="button" class="btn btn-lg"><a href={{url_for('add_poem')}}><span class="glyphicon glyphicon-pencil"></span>Pens out!</a></button><h1>add your own poem</h1>
     </div>
 {% else %}
-<div class="jumbotron">
+ #}<div class="jumbotron">
   <h1>Well hello there!</h1>
   <p>Take a look around, read some poems, and add your own if the Muses start singin'.</p>
   <p>This is microflaskin' <i>poetry</i>
   <p><a class="btn btn-primary btn-lg" href={{url_for('login_register')}}>Login or Register</a></p>
 </div>
 {% endif %}
+<h2>poems contributed:</h2>
 <table class="table table-striped table-hover ">
   <thead>
     <tr>

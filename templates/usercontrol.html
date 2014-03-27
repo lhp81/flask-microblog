@@ -11,6 +11,10 @@ login – {{super()}}
 </ul>
 {% endblock %}
 {% block body_content %}
+{% if session.logged_in %}
+<h3>dude, wtf</h3>
+<p>You're already logged in, genius. Maybe you'd like to do something useful, like <a href={{url_for('add_poem')}}>contributing a poem</a>.
+{% else %}
 <h3>Not a Registered Poet™? No worries, just <a href={{url_for('register_user')}}>register</a>!
 <br />
 <p>
@@ -20,6 +24,7 @@ login – {{super()}}
     <input type="password" class="form-control" name="password" placeholder="password" /><br />
     <input type="submit" class="btn btn-primary" value="Log In"/>
 </form>
+{% endif %}
 
 
 {% endblock %}

@@ -6,17 +6,35 @@ from datetime import datetime
 from flask.ext.script import Manager
 from flask.ext.migrate import Migrate, MigrateCommand
 from flask.ext.bootstrap import Bootstrap
+import os
+from flask.ext.mail import Mail, Message
 
 
 app = Flask(__name__)
+
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///flaskblog'
+
 app.secret_key = 'thiskeyissecret'
+
 db = SQLAlchemy(app)
+
 migrate = Migrate(app, db)
 manager = Manager(app)
 manager.add_command('db', MigrateCommand)
+
 bootstrap = Bootstrap(app)
+
 csrf = SeaSurf(app)
+
+mail = Mail(app)
+
+app.config['MAIL_SERVER'] = 'smtp.googlemail.com'
+app.config['MAIL_PORT'] = 587
+app.config['MAIL_USE_TLS'] = True
+app.config['MAIL_USERNAME'] = os.environ.get('MAIL_USERNAME')
+app.config['MAIL_PASSWORD'] = os.environ.get('MAIL_PASSWORD')
+app.config['MICROBLOG_MAIL_SUBJECT_PREFIX'] = '[mf\'n poetry]'
+app.config['MICROBLOG_MAIL_SENDER'] = 'the head poet <microflaskinpoetry@gmail.com>'
 
 
 class Post(db.Model):
@@ -113,14 +131,10 @@ def all_posts():
 def add_poem():
     if 'logged_in'in session and session['logged_in']:
         if request.method == "POST":
-            try:
-                # author = User.username == session['current_user']
-                write_post(request.form['title'],
-                           request.form['body'],
-                           session['current_user'])
-                return redirect(url_for('all_posts'))
-            except ValueError:
-                flash("Error: title and text required")
+            write_post(request.form['title'],
+                       request.form['body'],
+                       session['current_user'])
+            return redirect(url_for('all_posts'))
     return render_template('compose.html')
 
 
@@ -131,12 +145,19 @@ def login_register():
         if user and request.form['password'] == user.password:
             session['logged_in'] = True
             session['current_user'] = request.form['username']
-            flash('You are logged in')
+            flash("You are logged in. Whoopty-doo.")
             return redirect(url_for('all_posts'))
         else:
             flash('Dude, you muffed it. Try logging in again.')
     return render_template('usercontrol.html')
 
+
+def send_email(to, subject, template, **kwargs):
+    msg = Message(app.config['MICROBLOG_MAIL_SUBJECT_PREFIX'] + subject,
+                  sender=app.config['MICROBLOG_MAIL_SENDER'], recipients=[to])
+    msg.body = render_template(template + '.txt', **kwargs)
+    msg.html = render_template(template + '.html', **kwargs)
+    mail.send(msg)
 
 @app.route('/register', methods=['GET', 'POST'])
 def register_user():
@@ -164,16 +185,17 @@ def logout():
     flash('You were logged out -- see you next time!')
     return redirect(url_for('all_posts'))
 
-@app.route('/post/<id>')
+@app.route('/<id>')
 def single_poem(id):
     poem = read_poem(id)
-    return render_template('poem.html', id=id)
+    return render_template('poem.html', post=poem)
 
 def read_poem(id):
     """Retrieve a single post by its id."""
-    post = Post.query.filter_by(id=str(id)).first()
+    post = Post.query.get(id)
     if post is None:
-        raise NotFoundError("There exists no post with the specified id.")
+        flash('Sorry, that post doesn\'t exist.')
+        return redirect(url_for('all_posts'))
     return post
 
 if __name__ == '__main__':

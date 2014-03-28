@@ -35,11 +35,11 @@ mail = Mail(app)
 
 
 class Post(db.Model):
-    __tablename__ = 'posts'
+    # __tablename__ = 'posts'
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(80), unique=True)
     body = db.Column(db.Text)
-    author = db.Column(db.String)
+    author = db.Column(db.Integer, db.ForeignKey('user.id'))
     pub_date = db.Column(db.DateTime)
 
     def __init__(self, title, body, author, pub_date=None):
@@ -68,11 +68,12 @@ class Post(db.Model):
 
 
 class User(db.Model):
-    __tablename__ = 'users'
+    # __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(20), unique=True)
     password = db.Column(db.String(40))
     email = db.Column(db.String, unique=True)
+    user_posts = db.relationship("Post", backref="author")
     # confirmed = db.Column(db.Boolean)
 
     def __init__(self, username, password, email):
@@ -118,7 +119,8 @@ def add_user(username, email, password):
         flash('Enter a password, amigo. This isn\'t a perfect world.')
     else:
         if username and email and password:
-            
+            pass
+
 
 
 @app.route('/')

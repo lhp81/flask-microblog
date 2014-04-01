@@ -12,12 +12,12 @@ from flask_mail import Mail, Message
 app = Flask(__name__)
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///flaskblog'
-app.config['MAIL_SERVER'] = 'smtp.gmail.com'
-app.config['MAIL_PORT']= 465
-app.config['MAIL_USE_SSL'] = True
-app.config['MAIL_USERNAME'] = '@gmail.com'
-app.config['MAIL_PASSWORD'] = 'modernartisbullshitandi\'maphilistine'
-app.config['MAIL_DEFAULT_SENDER'] = ('the head poet', 'microflaskinpoetry@gmail.com')
+# app.config['MAIL_SERVER'] = 'smtp.gmail.com'
+# app.config['MAIL_PORT']= 465
+# app.config['MAIL_USE_SSL'] = True
+# app.config['MAIL_USERNAME'] = '@gmail.com'
+# app.config['MAIL_PASSWORD'] = 'modernartisbullshitandi\'maphilistine'
+# app.config['MAIL_DEFAULT_SENDER'] = ('the head poet', 'microflaskinpoetry@gmail.com')
 
 app.secret_key = 'thiskeyissecret'
 
@@ -39,7 +39,7 @@ class Post(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(80), unique=True)
     body = db.Column(db.Text)
-    author = db.Column(db.Integer, db.ForeignKey('user.id'))
+    author = db.Column(db.Integer, db.ForeignKey('User.id'))
     pub_date = db.Column(db.DateTime)
 
     def __init__(self, title, body, author, pub_date=None):

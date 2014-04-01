@@ -39,7 +39,7 @@ class Post(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(80), unique=True)
     body = db.Column(db.Text)
-    author = db.Column(db.Integer, db.ForeignKey('User.id'))
+    author_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     pub_date = db.Column(db.DateTime)
 
     def __init__(self, title, body, author, pub_date=None):
@@ -73,7 +73,7 @@ class User(db.Model):
     username = db.Column(db.String(20), unique=True)
     password = db.Column(db.String(40))
     email = db.Column(db.String, unique=True)
-    user_posts = db.relationship("Post", backref="author")
+    user_posts = db.relationship("Post", backref="author", lazy='dynamic')
     # confirmed = db.Column(db.Boolean)
 
     def __init__(self, username, password, email):

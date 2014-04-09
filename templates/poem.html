@@ -12,6 +12,7 @@ read a poem – {{super()}}
 {% endblock %}
 {% block body_content %}
     <h1>{{ post.title }}</h1>
+    <h2>{{ post.poet }}</h2>
     <i>contributed by {{ post.author }} on {{ post.pub_date }}</i><br />
     <p></p>
     {% for line in post.body.split('\r\n') %}

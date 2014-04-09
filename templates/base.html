@@ -59,13 +59,15 @@
   <thead>
     <tr>
       <th>poem</th>
+      <th>poet</th>
       <th>contributer</th>
     </tr>
   </thead>
   <tbody>
   {% for post in posts %}
     <tr>
-      <td><a href={{url_for('single_poem', id=post.id)}}>{{ post.title }}</a></td>
+      <td><a href={{ url_for('single_poem', id=post.id) }}>{{ post.title }}</a></td>
+      <td>{{ post.poet }}</td>
       <td>{{ post.author }}</td>
     </tr>
 {#   {% else %}

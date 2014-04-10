@@ -57,7 +57,7 @@ class Post(db.Model):
     author_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     poet = db.Column(db.String(80))
     pub_date = db.Column(db.DateTime)
-    category = db.relationship('Category', backref=db.backref('posts', lazy='dynamic'))
+    category = db.relationship('Category', backref=db.backref('category_name', lazy='dynamic'))
 
     def __init__(self, title, body, author, category, pub_date=None):
         self.title = title
@@ -95,6 +95,7 @@ class User(db.Model):
 
 class Category(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+    category_name = db.Column(db.String(20), unique=True)
 
     def __init__(self, category_name):
         self.category_name = category_name

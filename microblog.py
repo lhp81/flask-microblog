@@ -1,3 +1,7 @@
+# 99 chars across? yeah baby, I read two scoops of django.
+
+import string
+from random import choice
 from flask import (Flask, session, url_for, render_template, redirect, flash,
                    request)
 from flask.ext.seasurf import SeaSurf
@@ -37,6 +41,13 @@ csrf = SeaSurf(app)
 
 mail = Mail(app)
 
+# set up the database.
+
+categories = db.Table('categories',
+                      db.Column('category_id', db.Integer, db.ForeignKey('category.id')),
+                      db.Column('post_id', db.Integer, db.ForeignKey('post.id'))
+                      )
+
 
 class Post(db.Model):
     # __tablename__ = 'posts'
@@ -46,12 +57,13 @@ class Post(db.Model):
     author_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     poet = db.Column(db.String(80))
     pub_date = db.Column(db.DateTime)
+    category = db.relationship('Category', backref=db.backref('posts', lazy='dynamic'))
 
-    def __init__(self, title, body, author, pub_date=None):
+    def __init__(self, title, body, author, category, pub_date=None):
         self.title = title
         self.body = body
         self.author = author
-        # self.category = category
+        self.category = category
         if pub_date is None:
             pub_date = datetime.utcnow()
         self.pub_date = pub_date
@@ -60,45 +72,52 @@ class Post(db.Model):
         return '<Post %r>' % self.title
 
 
-# class Category(db.Model):
-#     __tablename__ = 'categories'
-#     id = db.Column(db.Integer, primary_key=True)
-#     name = db.Column(db.String(50))
-
-#     def __init__(self, name):
-#         self.name = name
-
-#     def __repr__(self):
-#         return '<Category %r>' % self.name
-
-
 class User(db.Model):
     # __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(20), unique=True)
-    password_hash = db.Column(db.String(128))
+    password = db.Column(db.String(128))
     email = db.Column(db.String, unique=True)
+    confirmation_key = db.Column(db.String(20))
+    confirmed = db.Column(db.Boolean, default=False)
     user_posts = db.relationship("Post", backref="author", lazy='dynamic')
-    # confirmed = db.Column(db.Boolean)
 
     def __init__(self, username, password, email):
         self.username = username
-        self.password = password
+        self.password = bcrypt.generate_password_hash(password)
         self.email = email
-        # self.confirmed = False
+        self.confirmation_key = create_registration_key()
+        self.confirmed = False
 
     def __repr__(self):
         return '<User %r>' % self.username
 
 
+class Category(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+
+    def __init__(self, category_name):
+        self.category_name = category_name
+
+    def __repr__(self):
+        return '<Category %r>' % self.category_name
+
+# here are the helper functions.
+
+
 def write_post(title, text, poet, author):
-    if title and text:
-        new_post = Post(title, text, author)
+    user = User.query.filter_by(username=request.form['username']).first()
+    if user.confirmed is False:
+        flash('You need to confirm your account before you can post.')
+        render_template('compose.html')
+    if title and text and poet:
+        new_post = Post(title, text, author, poet)
         db.session.add(new_post)
         db.session.commit()
+        flash('Thanks for your contribution.')
     else:
-        flash("A poem isn't a poem without a title and some content.\n"
-              "Don't get all cute and post-modern on me.")
+        flash("A poem isn't a poem without a title, a poet, and some content.\n"
+              "Don't get all cute and post-modern on me. Fill that shit out.")
 
 
 def read_posts():
@@ -106,17 +125,33 @@ def read_posts():
     return Post.query.order_by(Post.id.desc()).all()
 
 
-def add_user(username, email, password):
-    if username==None:
-        flash('No anonymous poets allowed. Pick a name, pilgrim.')
-    elif email==None:
-        flash('No, no, no. You have to enter a (valid) email.')
-    elif password==None:
-        flash('Enter a password, amigo. This isn\'t a perfect world.')
-    else:
-        if username and email and password:
-            pass
+def read_poem(id):
+    """Retrieve a single post by its id."""
+    post = Post.query.get(id)
+    if post is None:
+        flash('Sorry, that post doesn\'t exist.')
+        return redirect(url_for('all_posts'))
+    return post
 
+
+def create_registration_key():
+    return ''.join(choice(string.letters) for i in range(20))
+
+
+def add_user(username, email, password):
+    if username is None:
+        flash('No anonymous poets allowed. Pick a name, pilgrim.')
+        return redirect(url_for('register'))
+    elif email is None:
+        flash('No, no, no. You have to enter a (valid) email.')
+        return redirect(url_for('register'))
+    elif password is None:
+        flash('Enter a password, amigo. This isn\'t a perfect world.')
+        return redirect(url_for('register'))
+    else:
+        pass
+
+# and now for our views.
 
 
 @app.route('/')
@@ -127,7 +162,7 @@ def all_posts():
 
 @app.route('/compose', methods=['GET', 'POST'])
 def add_poem():
-    if 'logged_in'in session and session['logged_in']:
+    if 'logged_in' in session and session['logged_in']:
         if request.method == "POST":
             write_post(request.form['title'],
                        request.form['body'],
@@ -141,17 +176,15 @@ def add_poem():
 def login_register():
     if request.method == 'POST':
         user = User.query.filter_by(username=request.form['username']).first()
-        if user and request.form['password'] == user.password:
-            session['logged_in'] = True
-            session['current_user'] = request.form['username']
-            flash("You are logged in. Whoopty-doo.")
-            return redirect(url_for('all_posts'))
+        if user:
+            if bcrypt.generate_password_hash(request.form['password']) == user.password:
+                session['logged_in'] = True
+                session['current_user'] = request.form['username']
+                flash("You are logged in. Whoopty-doo.")
+                return redirect(url_for('all_posts'))
         else:
-            flash('Dude, you muffed it. Try logging in again.')
+            flash('Dude[ette], you muffed it. Try logging in again.')
     return render_template('usercontrol.html')
-
-
-
 
 
 @app.route('/register', methods=['GET', 'POST'])
@@ -164,6 +197,11 @@ def register_user():
     #         flash('Thanks for registering. Check your email for a confirmation link.')
     #         return render_template('base.html')
     return render_template('register.html')
+
+
+@app.route('/confirm/<string:conf_key>')
+def confirm_user():
+    pass
 
 
 @app.route('/categories')
@@ -180,18 +218,12 @@ def logout():
     flash('You were logged out -- see you next time!')
     return redirect(url_for('all_posts'))
 
+
 @app.route('/<id>')
 def single_poem(id):
     poem = read_poem(id)
-    return render_template('poem.html', post=poem, orig_poet=poet)
+    return render_template('poem.html', post=poem)
 
-def read_poem(id):
-    """Retrieve a single post by its id."""
-    post = Post.query.get(id)
-    if post is None:
-        flash('Sorry, that post doesn\'t exist.')
-        return redirect(url_for('all_posts'))
-    return post
 
 if __name__ == '__main__':
     manager.run()

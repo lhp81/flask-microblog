@@ -24,8 +24,8 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///flaskblog'
 # app.config['MAIL_PORT']= 465
 # app.config['MAIL_USE_SSL'] = True
 # app.config['MAIL_USERNAME'] = '@gmail.com'
-# app.config['MAIL_PASSWORD'] = 'modernartisbullshitandi\'maphilistine'
-# app.config['MAIL_DEFAULT_SENDER'] = ('the head poet', 'microflaskinpoetry@gmail.com')
+# app.config['MAIL_PASSWORD'] = ''
+# app.config['MAIL_DEFAULT_SENDER'] = ('the head poet', '@gmail.com')
 
 app.secret_key = 'thiskeyissecret'
 
@@ -36,9 +36,7 @@ manager = Manager(app)
 manager.add_command('db', MigrateCommand)
 
 bootstrap = Bootstrap(app)
-
 csrf = SeaSurf(app)
-
 mail = Mail(app)
 
 # set up the database.
@@ -216,7 +214,7 @@ def logout():
     session.pop('username', None)
     session.pop('logged_in', None)
     session.pop('user_id', None)
-    flash('You were logged out -- see you next time!')
+    flash('you\'re logged out -- see you next time, pilgrim')
     return redirect(url_for('all_posts'))
 
 
